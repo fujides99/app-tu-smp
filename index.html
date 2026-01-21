@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Tata Usaha - SMP Nusantara</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Halaman Login -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <form id="login-form" class="login-form">
+                <h2>Sistem Tata Usaha</h2>
+                <p class="login-subtitle">SMP Nusantara Jaya</p>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Masuk</button>
+                <p class="login-info">Gunakan username: <strong>admin</strong> dan password: <strong>admin123</strong></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Aplikasi Utama -->
+    <div id="app-container" class="app-container hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>SMP Nusantara</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" onclick="showPage('dashboard')" class="nav-link active" data-page="dashboard">📊 Dashboard</a></li>
+                    <li><a href="#" onclick="showPage('students')" class="nav-link" data-page="students">👨‍🎓 Data Siswa</a></li>
+                    <li><a href="#" onclick="showPage('teachers')" class="nav-link" data-page="teachers">👩‍🏫 Data Guru & Staff</a></li>
+                    <li><a href="#" onclick="showPage('correspondence')" class="nav-link" data-page="correspondence">📝 Surat Menyurat</a></li>
+                    <li><a href="#" onclick="showPage('announcements')" class="nav-link" data-page="announcements">📢 Pengumuman</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1 id="page-title">Dashboard</h1>
+                <button onclick="handleLogout()" class="btn btn-logout">Keluar</button>
+            </header>
+
+            <!-- Konten Halaman Dashboard -->
+            <section id="dashboard-page" class="page-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Siswa</h3>
+                        <p class="stat-number" id="total-students">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Guru & Staff</h3>
+                        <p class="stat-number" id="total-teachers">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Surat Bulan Ini</h3>
+                        <p class="stat-number" id="monthly-correspondence">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Pengumuman</h3>
+                        <p class="stat-number" id="total-announcements">0</p>
+                    </div>
+                </div>
+                <div class="recent-announcements">
+                    <h2>Pengumuman Terbaru</h2>
+                    <div id="dashboard-announcements-list"></div>
+                </div>
+            </section>
+
+            <!-- Konten Halaman Data Siswa -->
+            <section id="students-page" class="page-content">
+                <div class="content-header">
+                    <h2>Data Siswa</h2>
+                    <div>
+                        <button class="btn btn-secondary" onclick="exportToCSV('students', 'data-siswa')">Export CSV</button>
+                        <button class="btn btn-primary" onclick="openAddStudentModal()">+ Tambah Siswa</button>
+                    </div>
+                </div>
+                <input type="text" id="student-search" class="search-bar" placeholder="Cari berdasarkan nama atau NIS...">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NIS</th>
+                            <th>Nama Lengkap</th>
+                            <th>Kelas</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-table-body">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Konten Halaman Detail Siswa -->
+            <section id="student-detail-page" class="page-content">
+                <button class="btn btn-secondary mb-20" onclick="goBackFromStudentDetail()"><i class="fa fa-arrow-left"></i> Kembali</button>
+                <div id="student-detail-card" class="detail-card">
+                    <!-- Detail akan diisi oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- Konten Halaman Data Guru -->
+            <section id="teachers-page" class="page-content">
+                <div class="content-header">
+                    <h2>Data Guru & Staff</h2>
+                    <div>
+                        <button class="btn btn-secondary" onclick="exportToCSV('teachers', 'data-guru')">Export CSV</button>
+                        <button class="btn btn-primary" onclick="openAddTeacherModal()">+ Tambah Guru/Staff</button>
+                    </div>
+                </div>
+                <input type="text" id="teacher-search" class="search-bar" placeholder="Cari berdasarkan nama atau NIP...">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NIP/NIK</th>
+                            <th>Nama Lengkap</th>
+                            <th>Jabatan</th>
+                            <th>Mapel/Unit</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teachers-table-body">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Konten Halaman Surat Menyurat -->
+            <section id="correspondence-page" class="page-content">
+                <div class="content-header">
+                    <h2>Manajemen Surat Menyurat</h2>
+                    <button class="btn btn-primary" onclick="openAddCorrespondenceModal()">+ Buat Surat Baru</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Surat</th>
+                            <th>No. Surat</th>
+                            <th>Perihal</th>
+                            <th>Tujuan / Pengirim</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="correspondence-table-body">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Konten Halaman Pengumuman -->
+            <section id="announcements-page" class="page-content">
+                <div class="content-header">
+                    <h2>Manajemen Pengumuman</h2>
+                    <button class="btn btn-primary" onclick="openAddAnnouncementModal()">+ Buat Pengumuman</button>
+                </div>
+                <div id="announcements-list">
+                    <!-- Data akan diisi oleh JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Container untuk Toast Notification -->
+    <div id="toast-container"></div>
+
+    <!-- Modal untuk Tambah/Edit Siswa -->
+    <div id="student-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeStudentModal()">&times;</span>
+            <h2 id="student-modal-title">Tambah Siswa Baru</h2>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                <div class="form-group">
+                    <label for="student-nis">NIS</label>
+                    <input type="text" id="student-nis" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-name">Nama Lengkap</label>
+                    <input type="text" id="student-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-class">Kelas</label>
+                    <select id="student-class" required>
+                        <option value="VII A">VII A</option>
+                        <option value="VII B">VII B</option>
+                        <option value="VIII A">VIII A</option>
+                        <option value="VIII B">VIII B</option>
+                        <option value="IX A">IX A</option>
+                        <option value="IX B">IX B</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="student-gender">Jenis Kelamin</label>
+                    <select id="student-gender" required>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tambah/Edit Guru -->
+    <div id="teacher-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeTeacherModal()">&times;</span>
+            <h2 id="teacher-modal-title">Tambah Guru/Staff Baru</h2>
+            <form id="teacher-form">
+                <input type="hidden" id="teacher-id">
+                <div class="form-group">
+                    <label for="teacher-nip">NIP/NIK</label>
+                    <input type="text" id="teacher-nip" required>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-name">Nama Lengkap</label>
+                    <input type="text" id="teacher-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-position">Jabatan</label>
+                    <select id="teacher-position" required>
+                        <option value="Guru">Guru</option>
+                        <option value="Staff TU">Staff TU</option>
+                        <option value="Kepala Sekolah">Kepala Sekolah</option>
+                        <option value="Wakil Kepala Sekolah">Wakil Kepala Sekolah</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-subject">Mapel/Unit Kerja</label>
+                    <input type="text" id="teacher-subject" placeholder="Contoh: Matematika, TU, Kurikulum" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tambah Surat -->
+    <div id="correspondence-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCorrespondenceModal()">&times;</span>
+            <h2>Buat Surat Baru</h2>
+            <form id="correspondence-form">
+                <div class="form-group">
+                    <label for="correspondence-type">Jenis Surat</label>
+                    <select id="correspondence-type" required>
+                        <option value="Surat Masuk">Surat Masuk</option>
+                        <option value="Surat Keluar">Surat Keluar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="correspondence-number">No. Surat</label>
+                    <input type="text" id="correspondence-number" placeholder="Contoh: 001/SMP.NJ/V/2024" required>
+                </div>
+                <div class="form-group">
+                    <label for="correspondence-subject">Perihal</label>
+                    <input type="text" id="correspondence-subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="correspondence-recipient">Tujuan / Pengirim</label>
+                    <input type="text" id="correspondence-recipient" required>
+                </div>
+                <div class="form-group">
+                    <label for="correspondence-date">Tanggal Surat</label>
+                    <input type="date" id="correspondence-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="correspondence-desc">Keterangan</label>
+                    <textarea id="correspondence-desc" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan Surat</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tambah Pengumuman -->
+    <div id="announcement-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAnnouncementModal()">&times;</span>
+            <h2>Buat Pengumuman Baru</h2>
+            <form id="announcement-form">
+                <div class="form-group">
+                    <label for="announcement-title">Judul Pengumuman</label>
+                    <input type="text" id="announcement-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="announcement-content">Isi Pengumuman</label>
+                    <textarea id="announcement-content" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Publikasikan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
