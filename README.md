@@ -40,8 +40,8 @@ Pastikan Anda telah menginstal:
 ### Langkah 1: Kloning Repositori
 
 ```bash
-git clone https://github.com/username-anda/website-tata-usaha-smp.git
-cd website-tata-usaha-smp
+git clone https://github.com/fujides99/app-tu-smp
+cd app-tu-smp
 ```
 
 ### Langkah 2: Instalasi Dependensi Backend
@@ -92,4 +92,4 @@ Projek ini dilisensikan di bawah **MIT License**. Anda bebas untuk menggunakan, 
 
 ## 👤 Author
 
-Dibuat dengan ❤️ oleh [Nama Anda/Username GitHub Anda]
+Dibuat dengan ❤️ oleh [Fuji/fujides99]
